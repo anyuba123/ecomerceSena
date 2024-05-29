@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState, useCallback } from 'react'
+import { useLocation, useNavigate, } from 'react-router-dom'
 import productCategory from '../helpers/productCategory'
 import VerticalCard from '../components/VerticalCard'
 import SummaryApi from '../common'
@@ -7,7 +7,7 @@ import SummaryApi from '../common'
 const CategoryProduct = () => {
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   const location = useLocation()
   const urlSearch = new URLSearchParams(location.search)
   const urlCategoryListinArray = urlSearch.getAll("category")
@@ -22,7 +22,7 @@ const CategoryProduct = () => {
 
   const [sortBy, setSortBy] = useState("")
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const response = await fetch(SummaryApi.filterProduct.url, {
       method: SummaryApi.filterProduct.method,
       headers: {
@@ -31,11 +31,11 @@ const CategoryProduct = () => {
       body: JSON.stringify({
         category: filterCategoryList
       })
-    })
+    });
 
-    const dataResponse = await response.json()
-    setData(dataResponse?.data || [])
-  }
+    const dataResponse = await response.json();
+    setData(dataResponse?.data || []);
+  }, [filterCategoryList]); 
 
   const handleSelectCategory = (e) => {
     const { value, checked } = e.target

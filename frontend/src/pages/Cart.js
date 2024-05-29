@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import SummaryApi from '../common';
 import Context from '../context';
 import displayINRCurrency from '../helpers/displayCurrency';
@@ -26,15 +26,16 @@ const Cart = () => {
     }
   };
 
-  const handleLoading = async () => {
+  const handleLoading = useCallback(async () => {
     await fetchData();
-  };
+  }, []); // Empty dependency array means this function is memoized once
 
   useEffect(() => {
     setLoading(true);
-    handleLoading();
-    setLoading(false);
-  }, []);
+    handleLoading().then(() => {
+      setLoading(false);
+    });
+  }, [handleLoading]); 
 
   const increaseQty = async (id, qty) => {
     const response = await fetch(SummaryApi.updateCartProduct.url, {

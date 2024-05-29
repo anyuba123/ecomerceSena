@@ -6,7 +6,6 @@ import SummaryApi from '../common'
 import { FaStar } from "react-icons/fa";
 import { FaStarHalf } from "react-icons/fa";
 import displayINRCurrency from '../helpers/displayCurrency';
-import VerticalCardProduct from '../components/VerticalCardProduct';
 import CategroyWiseProductDisplay from '../components/CategoryWiseProductDisplay';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
@@ -36,8 +35,8 @@ const ProductDetails = () => {
 
   const navigate = useNavigate()
 
-  const fetchProductDetails = async () => {
-    setLoading(true)
+  const fetchProductDetails = useCallback(async () => {
+    setLoading(true);
     const response = await fetch(SummaryApi.productDetails.url, {
       method: SummaryApi.productDetails.method,
       headers: {
@@ -46,20 +45,18 @@ const ProductDetails = () => {
       body: JSON.stringify({
         productId: params?.id
       })
-    })
-    setLoading(false)
-    const dataReponse = await response.json()
-
-    setData(dataReponse?.data)
-    setActiveImage(dataReponse?.data?.productImage[0])
-
-  }
+    });
+    const dataReponse = await response.json();
+    setData(dataReponse?.data);
+    setActiveImage(dataReponse?.data?.productImage[0]);
+    setLoading(false);
+  }, [params?.id]); 
 
   console.log("data", data)
 
   useEffect(() => {
     fetchProductDetails()
-  }, [params])
+  }, [params, fetchProductDetails])
 
   const handleMouseEnterProduct = (imageURL) => {
     setActiveImage(imageURL)
@@ -77,7 +74,7 @@ const ProductDetails = () => {
       x,
       y
     })
-  }, [zoomImageCoordinate])
+  }, [setZoomImageCoordinate])
 
   const handleLeaveImageZoom = () => {
     setZoomImage(false)
