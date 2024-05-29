@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import SummaryApi from '../common'
 import VerticalCard from '../components/VerticalCard'
@@ -10,18 +10,18 @@ const SearchProduct = () => {
 
   console.log("query", query.search)
 
-  const fetchProduct = async () => {
-    setLoading(true)
-    const response = await fetch(SummaryApi.searchProduct.url + query.search)
-    const dataResponse = await response.json()
-    setLoading(false)
+  const fetchProduct = useCallback(async () => {
+    setLoading(true);
+    const response = await fetch(SummaryApi.searchProduct.url + query.search);
+    const dataResponse = await response.json();
+    setLoading(false);
 
-    setData(dataResponse.data)
-  }
+    setData(dataResponse.data);
+  }, [query]);
 
   useEffect(() => {
-    fetchProduct()
-  }, [query])
+    fetchProduct();
+  }, [query, fetchProduct]);
 
   return (
     <div className='container mx-auto p-4'>

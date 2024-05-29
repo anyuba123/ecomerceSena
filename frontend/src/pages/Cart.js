@@ -119,7 +119,7 @@ const Cart = () => {
             data.map((product, index) => (
               <div key={product?._id + "Add To Cart"} className='w-full bg-white my-2 border border-slate-300 rounded flex'>
                 <div className='w-32 h-32 bg-slate-200'>
-                  <img src={product?.productId?.productImage[0]} className='w-full h-full object-scale-down mix-blend-multiply' />
+                  <img src={product?.productId?.productImage[0]} className='w-full h-full object-scale-down mix-blend-multiply' alt='.' />
                 </div>
                 <div className='px-4 py-2 flex flex-col justify-between w-full relative'>
                   <div className='absolute right-2 top-2 text-red-600 rounded-full p-2 hover:bg-red-600 hover:text-white cursor-pointer' onClick={() => deleteCartProduct(product?._id)}>

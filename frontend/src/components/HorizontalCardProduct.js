@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import fetchCategoryWiseProduct from '../helpers/fetchCategoryWiseProduct';
 import displayINRCurrency from '../helpers/displayCurrency';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
@@ -20,18 +20,18 @@ const HorizontalCardProduct = ({ category, heading }) => {
     fetchUserAddToCart();
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     const categoryProduct = await fetchCategoryWiseProduct(category);
     setLoading(false);
 
     console.log("horizontal data", categoryProduct.data);
     setData(categoryProduct?.data);
-  };
+  }, [category]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const scrollRight = () => {
     scrollElement.current.scrollLeft += 300;
@@ -54,7 +54,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
               <div key={index} className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex'>
                 <div className='bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px] animate-pulse'></div>
                 <div className='p-4 grid w-full gap-2'>
-                  <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black bg-slate-200 animate-pulse p-1 rounded-full'></h2>
+                  <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black bg-slate-200 animate-pulse p-1 rounded-full'>.</h2>
                   <p className='capitalize text-slate-500 p-1 bg-slate-200 animate-pulse rounded-full'></p>
                   <div className='flex gap-3 w-full'>
                     <p className='text-red-600 font-medium p-1 bg-slate-200 w-full animate-pulse rounded-full'></p>

@@ -17,9 +17,9 @@ const AllProducts = () => {
 
     setAllProduct(dataResponse?.data || [])
   }
-   useEffect(() => {
+  useEffect(() => {
     fetchAllProduct()
-  }, []) 
+  }, [])
 
   return (
     <div>
@@ -40,10 +40,10 @@ const AllProducts = () => {
       </div>
 
 
-  
+
       {
         openUploadProduct && (
-          <UploadProduct onClose={() => setOpenUploadProduct(false)} fetchData={fetchAllProduct}  />
+          <UploadProduct onClose={() => setOpenUploadProduct(false)} fetchData={fetchAllProduct} />
         )
       }
 

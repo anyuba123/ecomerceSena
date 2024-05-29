@@ -38,7 +38,7 @@ const CategoryProduct = () => {
   }
 
   const handleSelectCategory = (e) => {
-    const { name, value, checked } = e.target
+    const { value, checked } = e.target
 
     setSelectCategory((preve) => {
       return {
@@ -50,7 +50,7 @@ const CategoryProduct = () => {
 
   useEffect(() => {
     fetchData()
-  }, [filterCategoryList])
+  }, [filterCategoryList,fetchData])
 
   useEffect(() => {
     const arrayOfCategory = Object.keys(selectCategory).map(categoryKeyName => {
@@ -71,7 +71,7 @@ const CategoryProduct = () => {
     })
 
     navigate("/product-category?" + urlFormat.join(""))
-  }, [selectCategory])
+  }, [selectCategory,navigate])
 
 
   const handleOnChangeSortBy = (e) => {

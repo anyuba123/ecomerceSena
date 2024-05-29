@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState, useCallback } from 'react'
 import fetchCategoryWiseProduct from '../helpers/fetchCategoryWiseProduct'
 import displayINRCurrency from '../helpers/displayCurrency'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
@@ -21,18 +21,18 @@ const VerticalCardProduct = ({ category, heading }) => {
     fetchUserAddToCart()
   }
 
-  const fetchData = async () => {
-    setLoading(true)
-    const categoryProduct = await fetchCategoryWiseProduct(category)
-    setLoading(false)
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const categoryProduct = await fetchCategoryWiseProduct(category);
+    setLoading(false);
 
-    console.log("horizontal data", categoryProduct.data)
-    setData(categoryProduct?.data)
-  }
+    console.log("horizontal data", categoryProduct.data);
+    setData(categoryProduct?.data);
+  }, [category]);
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, [fetchData]);
 
   const scrollRight = () => {
     scrollElement.current.scrollLeft += 300
@@ -62,7 +62,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                   <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse'>
                   </div>
                   <div className='p-4 grid gap-3'>
-                    <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200'></h2>
+                    <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200'>.</h2>
                     <p className='capitalize text-slate-500 p-1 animate-pulse rounded-full bg-slate-200  py-2'></p>
                     <div className='flex gap-3'>
                       <p className='text-red-600 font-medium p-1 animate-pulse rounded-full bg-slate-200 w-full  py-2'></p>
@@ -78,7 +78,7 @@ const VerticalCardProduct = ({ category, heading }) => {
               return (
                 <Link to={"product/" + product?._id} className='w-full min-w-[280px]  md:min-w-[320px] max-w-[280px] md:max-w-[320px]  bg-white rounded-sm shadow '>
                   <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
-                    <img src={product.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
+                    <img src={product.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' alt='.'/>
                   </div>
                   <div className='p-4 grid gap-3'>
                     <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
