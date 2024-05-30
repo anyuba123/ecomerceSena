@@ -88,7 +88,7 @@ const SignUp = () => {
             <form>
               <label>
                 <div className='text-xs bg-opacity-80 bg-slate-200 pb-4 pt-2 cursor-pointer text-center absolute bottom-0 w-full'>
-                  Upload  Photo
+                  Subir Foto
                 </div>
                 <input type='file' className='hidden' onChange={handleUploadPic} />
               </label>
