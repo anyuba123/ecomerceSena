@@ -4,8 +4,16 @@ const cookieParser = require('cookie-parser')
 require('dotenv').config()
 const connectDB = require('./config/db')
 const router = require('./routes')
-
+const authToken = require('./authToken');
 const app = express()
+
+
+app.get('/protected-route', authToken, (req, res) => {
+  res.json({
+    message: 'Ruta protegida accedida!',
+    userId: req.userId
+  });
+});
 
 app.use(cors({
   origin: process.env.FRONTEND_URL,

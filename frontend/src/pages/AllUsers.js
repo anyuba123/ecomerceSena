@@ -50,7 +50,7 @@ import ChangeUserRole from '../components/ChangeUserRole';
             <th className='userTableCell'>Nombre</th>
             <th>Email</th>
             <th>Rol</th>
-            <th>fecha Creacin</th>
+            <th>fecha Creacion</th>
             <th>Acción</th>
           </tr>
         </thead>
