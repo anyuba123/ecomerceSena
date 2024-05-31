@@ -40,15 +40,15 @@ const Login = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
+        await  fetchUserDetails();
+        await fetchUserAddToCart();
         navigate('/');
-        fetchUserDetails();
-        fetchUserAddToCart();
       } else if (response.data.error) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error('Login failed', error);
-      toast.error('Failed to fetch data from the server.');
+      console.error('Inicio Fallido', error);
+      toast.error('Fallo a conocer datos del servidor.');
     }
   };
 
