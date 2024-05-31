@@ -27,10 +27,7 @@ const searchProduct = require('../controller/searchProduct')
 const filterProductController = require('../controller/filterProduct')
 
 
-const authToken = require('../middleware/authToken');
-const userController = require('../controllers/userController');
 
-router.get('/user-details', authToken, userController.getUserDetails);
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
