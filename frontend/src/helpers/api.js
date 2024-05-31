@@ -4,7 +4,7 @@ export async function fetchProtectedRoute() {
   const token = localStorage.getItem('token');
 
   try {
-    const response = await fetch('https://tu-api.render.com/protected-route', {
+    const response = await fetch('https://ecomercesena-80.onrender.com/api/user-details', {
       method: 'GET', // o el método que necesites
       headers: {
         'Content-Type': 'application/json',
