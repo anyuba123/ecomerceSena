@@ -1,9 +1,9 @@
  const jwt = require('jsonwebtoken');
-require('dotenv').config();
+
 async function authToken(req, res, next) {
   try {
     const token = req.cookies?.token;
-    console.log("Token from request:", token);
+    console.log("Token desde la respuesta:", token);
 
     if (!token) {
       return res.status(401).json({
@@ -14,26 +14,22 @@ async function authToken(req, res, next) {
     }
 
     jwt.verify(token, process.env.TOKEN_SECRET_KEY, function (err, decoded) {
+      console.log(err)
+      console.log("decoded", decoded)
       if (err) {
-        console.error("Error verifying JWT:", err);
-        return res.status(401).json({
-          message: "Token inválido",
-          error: true,
-          success: false
-        });
+        console.log("error auth", err)
       }
+      req.userId = decoded?._id
 
-      console.log("Decoded token payload:", decoded);
-      req.userId = decoded._id;
-      next();
+      next()
     });
   } catch (error) {
-    console.error("Error en middleware authToken:", error);
-    res.status(500).json({
-      message: "Error interno del servidor",
+    res.status(400).json({
+      message: err.message || err,
+      data: [],
       error: true,
       success: false
-    });
+    })
   }
 }
 

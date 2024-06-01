@@ -3,7 +3,6 @@ import loginIcons from '../signin.gif';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import Context from '../context';
 import SummaryApi from '../common';
 
@@ -25,32 +24,35 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    try {
-      const response = await axios.post(SummaryApi.signIn.url, data, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+    const dataResponse = await fetch(SummaryApi.signIn.url, {
+      method: SummaryApi.signIn.method,
+      credentials: 'include',
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
 
-      console.log('Response Status:', response.status);
-      console.log('Response Data:', response.data);
+    const dataApi = await dataResponse.json()
 
-      if (response.data.success) {
-        toast.success(response.data.message);
-        await  fetchUserDetails();
-        await fetchUserAddToCart();
-        navigate('/');
-      } else if (response.data.error) {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error('Inicio Fallido', error);
-      toast.error('Fallo a conocer datos del servidor.');
+    if (dataApi.success) {
+      toast.success(dataApi.message)
+      navigate('/')
+      fetchUserDetails()
+      fetchUserAddToCart()
     }
-  };
+
+    if (dataApi.error) {
+      toast.error(dataApi.message)
+    }
+
+  }
+
+  console.log("data login", data)
+
+  
 
   return (
     <section id='login'>
