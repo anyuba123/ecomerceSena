@@ -31,7 +31,7 @@ const filterProductController = require('../controller/filterProduct')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
-router.get("/user-details", authToken, userDetailsController)
+router.get("/user-details", /* authToken, */ userDetailsController)
 router.get("/userLogout", userLogout)
 
 
@@ -49,7 +49,7 @@ router.get("/search", searchProduct)
 router.post("/filter-product", filterProductController)
 
 router.post("/addtocart", authToken, addToCartController)
-router.get("/countAddToCartProduct", authToken, countAddToCartProduct)
+router.get("/countAddToCartProduct",/*  authToken,  */countAddToCartProduct)
 router.get("/view-card-product", authToken, addToCartViewProduct)
 router.post("/update-cart-product", authToken, updateAddToCartProduct)
 router.post("/delete-cart-product", authToken, deleteAddToCartProduct)

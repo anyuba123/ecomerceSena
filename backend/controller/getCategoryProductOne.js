@@ -4,7 +4,7 @@ const categoryTranslations = {
   'Airpodes': 'Auriculares',
   'furniture': 'Muebles',
   'clothing': 'Ropa',
-  // Añade aquí todas las categorías que necesites traducir
+
 };
 
 const translateCategory = (category) => {
