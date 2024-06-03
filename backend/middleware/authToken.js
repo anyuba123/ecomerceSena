@@ -1,4 +1,4 @@
- const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 async function authToken(req, res, next) {
   try {
@@ -14,15 +14,21 @@ async function authToken(req, res, next) {
     }
 
     jwt.verify(token, process.env.TOKEN_SECRET_KEY, function (err, decoded) {
-      console.log(err)
-      console.log("decoded", decoded)
       if (err) {
-        console.log("error auth", err)
+        console.log("Error en la verificación del token:", err);
+        return res.status(401).json({
+          message: "Token inválido",
+          error: true,
+          success: false
+        });
       }
-      req.userId = decoded?._id
 
+
+      req.userId = decoded?._id
       next()
     });
+
+    
   } catch (error) {
     res.status(400).json({
       message: err.message || err,
@@ -34,5 +40,5 @@ async function authToken(req, res, next) {
 }
 
 module.exports = authToken;
- 
+
 
