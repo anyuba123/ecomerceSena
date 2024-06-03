@@ -35,6 +35,13 @@ async function userSignInController(req, res) {
         secure: true
       } */
 
+      const tokenOption = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        maxAge: 8 * 60 * 60 * 1000 // 8 hours
+      };
+
       res.cookie("token", token, tokenOption).status(200).json({
         message: "Ingreso Exitoso",
         data: token,

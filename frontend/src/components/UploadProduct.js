@@ -6,13 +6,9 @@ import uploadImage from '../helpers/uploadImage';
 import { MdDelete } from "react-icons/md";
 import DisplayImage from './DisplayImage';
 import SummaryApi from '../common';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 
-
-const UploadProduct = (
-  { onClose,
-    fetchData
-  }) => {
+const UploadProduct = ({ onClose, fetchData }) => {
   const [data, setData] = useState({
     productName: "",
     brandName: "",
@@ -21,50 +17,53 @@ const UploadProduct = (
     description: "",
     price: "",
     sellingPrice: ""
-  })
-  const [openFullScreenImage, setOpenFullScreenImage] = useState(false)
-  const [fullScreenImage, setFullScreenImage] = useState("")
-
+  });
+  const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
+  const [fullScreenImage, setFullScreenImage] = useState("");
 
   const handleOnChange = (e) => {
-    const { name, value } = e.target
-
-    setData((preve) => {
+    const { name, value } = e.target;
+    setData((prev) => {
       return {
-        ...preve,
+        ...prev,
         [name]: value
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleUploadProduct = async (e) => {
-    const file = e.target.files[0]
-    const uploadImageCloudinary = await uploadImage(file)
-    console.log("uploadimage", uploadImageCloudinary.url);
-    setData((preve) => {
-      return {
-        ...preve,
-        productImage: [...preve.productImage, uploadImageCloudinary.url]
-      }
-    }) 
-  }
+    const file = e.target.files[0];
+    const uploadImageCloudinary = await uploadImage(file);
+    console.log("uploadimage", uploadImageCloudinary.secure_url);
+
+    if (uploadImageCloudinary.secure_url) {
+      setData((prev) => {
+        return {
+          ...prev,
+          productImage: [...prev.productImage, uploadImageCloudinary.secure_url]
+        };
+      });
+    } else {
+      console.error('Error uploading image:', uploadImageCloudinary);
+    }
+  };
 
   const handleDeleteProductImage = async (index) => {
-    console.log("image index", index)
+    console.log("image index", index);
 
-    const newProductImage = [...data.productImage]
-    newProductImage.splice(index, 1)
+    const newProductImage = [...data.productImage];
+    newProductImage.splice(index, 1);
 
-    setData((preve) => {
+    setData((prev) => {
       return {
-        ...preve,
+        ...prev,
         productImage: [...newProductImage]
-      }
-    })
+      };
+    });
+  };
 
-  }
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const response = await fetch(SummaryApi.uploadProduct.url, {
       method: SummaryApi.uploadProduct.method,
@@ -73,28 +72,22 @@ const UploadProduct = (
         "content-type": "application/json"
       },
       body: JSON.stringify(data)
-    })
+    });
 
-    const responseData = await response.json()
+    const responseData = await response.json();
 
     if (responseData.success) {
-      toast.success(responseData?.message)
-      onClose()
-      fetchData()
-
+      toast.success(responseData?.message);
+      onClose();
+      fetchData();
+    } else if (responseData.error) {
+      toast.error(responseData?.message);
     }
+  };
 
-
-    if (responseData.error) {
-      toast.error(responseData?.message)
-    }
-
-
-  }
   return (
     <div className='fixed w-full h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center'>
       <div className='bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden'>
-
         <div className='flex justify-between items-center pb-3'>
           <h2 className='font-bold text-lg'>Cargar Producto</h2>
           <div className='w-fit ml-auto text-2xl hover:text-red-600 cursor-pointer' onClick={onClose}>
@@ -102,7 +95,7 @@ const UploadProduct = (
           </div>
         </div>
 
-        <form className='grid p-4 gap-2 overflow-y-scroll h-full pb-2'onSubmit={handleSubmit} >
+        <form className='grid p-4 gap-2 overflow-y-scroll h-full pb-2' onSubmit={handleSubmit}>
           <label htmlFor='productName'>Nombre del Producto :</label>
           <input
             type='text'
@@ -134,7 +127,7 @@ const UploadProduct = (
               productCategory.map((el, index) => {
                 return (
                   <option value={el.value} key={el.value + index}>{el.label}</option>
-                )
+                );
               })
             }
           </select>
@@ -148,8 +141,8 @@ const UploadProduct = (
                 <input type='file' id='uploadImageInput' className='hidden' onChange={handleUploadProduct} />
               </div>
             </div>
-          </label> 
-          
+          </label>
+
           <div>
             {
               data?.productImage[0] ? (
@@ -157,7 +150,7 @@ const UploadProduct = (
                   {
                     data.productImage.map((el, index) => {
                       return (
-                        <div className='relative group'>
+                        <div key={index} className='relative group'>
                           <img
                             src={el}
                             alt={el}
@@ -165,16 +158,15 @@ const UploadProduct = (
                             height={80}
                             className='bg-slate-100 border cursor-pointer'
                             onClick={() => {
-                              setOpenFullScreenImage(true)
-                              setFullScreenImage(el)
+                              setOpenFullScreenImage(true);
+                              setFullScreenImage(el);
                             }} />
 
                           <div className='absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full hidden group-hover:block cursor-pointer' onClick={() => handleDeleteProductImage(index)}>
                             <MdDelete />
                           </div>
                         </div>
-
-                      )
+                      );
                     })
                   }
                 </div>
@@ -221,17 +213,11 @@ const UploadProduct = (
 
           <button className='px-3 py-2 bg-red-600 text-white mb-10 hover:bg-red-700'>Subir Producto</button>
         </form>
-
-
-
       </div>
 
-
-      {
-        openFullScreenImage && (
-          <DisplayImage onClose={() => setOpenFullScreenImage(false)} imgUrl={fullScreenImage} />
-        )
-      }
+      {openFullScreenImage && (
+        <DisplayImage onClose={() => setOpenFullScreenImage(false)} imgUrl={fullScreenImage} />
+      )}
     </div>
   );
 };

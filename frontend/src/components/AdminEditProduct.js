@@ -43,12 +43,16 @@ const AdminEditProduct = ({
     const file = e.target.files[0]
     const uploadImageCloudinary = await uploadImage(file)
 
-    setData((preve) => {
-      return {
-        ...preve,
-        productImage: [...preve.productImage, uploadImageCloudinary.url]
-      }
-    })
+    if (uploadImageCloudinary.secure_url) {
+      setData((preve) => {
+        return {
+          ...preve,
+          productImage: [...preve.productImage, uploadImageCloudinary.secure_url]
+        }
+      })
+    } else {
+      console.error('Error uploading image:', uploadImageCloudinary);
+    }
   }
 
   const handleDeleteProductImage = async (index) => {
@@ -63,11 +67,8 @@ const AdminEditProduct = ({
         productImage: [...newProductImage]
       }
     })
-
   }
 
-
- 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -88,16 +89,13 @@ const AdminEditProduct = ({
       fetchdata()
     }
 
-
     if (responseData.error) {
       toast.error(responseData?.message)
     }
-
-
   }
 
   return (
-    <div className='fixed w-full  h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center'>
+    <div className='fixed w-full h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center'>
       <div className='bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden'>
 
         <div className='flex justify-between items-center pb-3'>
@@ -119,7 +117,6 @@ const AdminEditProduct = ({
             className='p-2 bg-slate-100 border rounded'
             required
           />
-
 
           <label htmlFor='brandName' className='mt-3'>Marca:</label>
           <input
@@ -162,7 +159,7 @@ const AdminEditProduct = ({
                   {
                     data.productImage.map((el, index) => {
                       return (
-                        <div className='relative group'>
+                        <div key={index} className='relative group'>
                           <img
                             src={el}
                             alt={el}
@@ -184,7 +181,7 @@ const AdminEditProduct = ({
                   }
                 </div>
               ) : (
-                  <p className='text-red-600 text-xs'>Por favor, subir una imagén del producto</p>
+                <p className='text-red-600 text-xs'>Por favor, subir una imagén del producto</p>
               )
             }
 
@@ -201,7 +198,6 @@ const AdminEditProduct = ({
             className='p-2 bg-slate-100 border rounded'
             required
           />
-
 
           <label htmlFor='sellingPrice' className='mt-3'>Precio de Venta :</label>
           <input
@@ -226,19 +222,10 @@ const AdminEditProduct = ({
           >
           </textarea>
 
-
-
-
-
           <button className='px-3 py-2 bg-red-600 text-white mb-10 hover:bg-red-700'>Editar Producto</button>
         </form>
 
-
-
-
       </div>
-
-
 
       {/***display image full screen */}
       {
@@ -246,10 +233,8 @@ const AdminEditProduct = ({
           <DisplayImage onClose={() => setOpenFullScreenImage(false)} imgUrl={fullScreenImage} />
         )
       }
-
-
     </div>
   )
 }
 
-export default AdminEditProduct
+export default AdminEditProduct;
