@@ -6,7 +6,7 @@ const connectDB = require('./config/db')
 const router = require('./routes')
 const authToken = require('./middleware/authToken')
 
-
+const app = express()
 // Otros middlewares y rutas
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/protected-route', authToken, (req, res) => {
   res.json({ message: 'Ruta protegida accesible', userId: req.userId });
 });
-const app = express()
+
 
 app.use(cors({
   /*   origin: process.env.FRONTEND_URL, */
