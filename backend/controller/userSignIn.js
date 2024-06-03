@@ -29,18 +29,14 @@ async function userSignInController(req, res) {
         email: user.email,
       }
       const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 8 });
-/* 
-      const tokenOption = {
-        httpOnly: true,
-        secure: true
-      } */
 
       const tokenOption = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',
-        maxAge: 8 * 60 * 60 * 1000 // 8 hours
-      };
+        secure: true,
+        sameSite: 'None'
+      } 
+
+
 
       res.cookie("token", token, tokenOption).status(200).json({
         message: "Ingreso Exitoso",
